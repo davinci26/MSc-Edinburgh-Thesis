@@ -1,0 +1,34 @@
+
+\chapter{Conclusion and Future Work} \label{chap:conc}{
+\section{Project Analysis}{
+
+To conclude the project, we will analyze holistically the design in terms of the requirements that were set in Section \ref{sec:PD}. Overall the goal of the project which was to develop a decentralized firmware distribution network was achieved. Specifically, we can examine each goal individually:
+\begin{itemize}
+    \item \textbf{No single point of failure}: This requirement is easily satisfied from the Ethereum blockchain and the IPFS network. In our framework device manufacturers are the initial trusted developer of the device. However, this does not prohibit other developers from developing firmware for a given device. As a result, Código network not only enables open source firmware development but also provides an infrastructure that also promotes it.
+    \item \textbf{Equivalent security with code signing}: Essentially the code signing procedure is followed but in, different way. The hash of the firmware and the signature of the hash are submitted to the Ethereum network when the firmware is uploaded. When users download a file from the IPFS network they, already have a signed hash and consequently they can compare the hash of the file with the hash of the file available in the smart-contract. In the code signing procedure, the developer also includes a certificate from a certificate authority that authenticates her public key. In Código network, instead of relying on certificate authorities for trusted developers, we deployed the Web-of-Trust infrastructure.
+    \item \textbf{Transparency}: Every uploaded firmware is associated with a specific public key, linking to a developer. Furthermore, due to the Web-of-Trust, developers can not change their public key and expect to have their firmware viewed by a lot of users. As uploading a firmware requires an Ethereum transaction every firmware update is visible by parsing the Ethereum blockchain. Finally, as long as Ethereum is secure, developers are not able to edit or delete a firmware update from the blockchain.
+    \item \textbf{Scalability}: As seen from the results IPFS is able to outperform the vanilla implementation of the BitTorrent protocol. IPFS is still slower than the client-server model. However, given the funding that Protocol Labs received and the fact that the IPFS community is already working on alleviating the duplicate-blocks issue, we are positive that the performance of IPFS would improve dramatically in the forseable future.
+\end{itemize}
+
+}
+\section{Ethical Considerations}{
+
+In the design of the Código network firmware repository smart-contract, we say that "The firmware repository can be thought of as a classic torrent website repository". The question that remains is what stops users from using this as an illegal file distribution framework. Nothing in the code can stop users from uploading illegal movies in the Código network firmware repository smart-contract and using the IPFS link to distribute those movies. On the other hand, users that only want to download a firmware are not affected by this as they have a way to curate the downloaded files and trust developers they know or that the manufacturer trusts. On the other hand, nothing stops an illegal content distribution community from forming their own strongly connected component in the trust graph and use the framework to distribute illegal content.
+
+Sadly, the most pragmatic answer to this ethical consideration is that it is unavoidable. Código network is firmware distribution network, or even better a fully decentralized file distribution network. As any other new technology, Código network is a double-edged sword. Especially considering that in a decentralized system there is no central authority, that can curate and ban illegal behaviors.  The author truly believes that any fully decentralized system is a true reflection of the society. Agents engaging in illegal activities are a part of our society but the majority of agents are willing to participate in society according to its rules. Additionally, it should be noted that transactions in Código network and file uploads are not anonymous. As a result, users that deviate from the core concept of decentralized firmware distribution should understand that they are doing it in a public and transparent way.
+
+
+}
+\section{Proposal for Future Work}{
+
+Although Código network managed to satisfy the goals set on Section \ref{sec:PD}, it could be further improved. The areas of improvement could be:
+
+\begin{itemize}
+    \item \textbf{Multi-signatures}: incorporate $m-n$ multi-signatures during the signing process of the firmware. Multi-signature accounts can be implemented in the form of Ethereum smart-contracts. Users would then have to trust the smart-contract providing the multi-signature instead of trusting individual developers.
+    \item \textbf{Content curation}: The basis for this idea would be nodes to execute the firmware in a sandbox environment, based on secure hardware. Then classify the firmware as malicious or honest and construct a cryptographic proof of proper execution of the experiment. This proof could be submitted on the firmware repository smart contract in order to delete a firmware.
+    \item \textbf{Mechanism design}: In the current design, developers are required to pay fees in order to submit a firmware to the repository. Additionally, honest developers that provide value to the community obtain no implicit or explicit reward. In Github, for example, developers are implicitly rewarded with repository stars or community recognition for their work. Código network could introduce a utility token via an ICO and reward developers that offer value to the community. However, the introduction of such a coin is not a trivial task, due to  the decentralized nature of the system.
+\end{itemize}
+
+
+}
+}

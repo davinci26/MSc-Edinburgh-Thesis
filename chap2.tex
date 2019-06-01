@@ -1,0 +1,62 @@
+
+\chapter{Blockchain Technology} \label{chap:bc}{
+
+The blockchain revolution began with the Bitcoin whitepaper \cite{nakamoto2008bitcoin} that demonstrated a protocol for maintaining a log of transactions in trustless settings in which peers can enter and leave the protocol execution at any point. The Bitcoin whitepaper uses this protocol to create the first decentralized digital currency (cryptocurrency). In this section, a brief introduction to the blockchain technology will be presented. Finally, the Ethereum blockchain \cite{WoodGavin2014Ethereum:Ledger}, which is used as a building block for Código network, will be examined in more detail.
+
+\section{Maintaining a Chain of Blocks}{
+
+\subsection{Transactions}{
+The blockchain technology consists of a set of protocols and algorithms that enable a set of trustless peers to maintain, extend and agree on a common distributed log of ordered transactions. The underlying distributed log of ordered transactions is implemented using the blockchain data structure in the majority of cases. The blockchain is a recursive data structure similar to a linked-list. Each block in the blockchain contains a cryptographic pointer to the previous block. The existence of cryptographic pointers connecting the blocks gives this data-structure a particular set of properties. That if one block within the chain changes, then the whole chain after that also needs to be recreated to make the pointers match. Then, assuming that the process of creating valid blocks is "hard", the distributed ledger has one really useful property which is tamper resistance.
+
+According to the Bitcoin protocol (this also holds true for all blockchain protocols), each node of the system needs to have its own copy of the blockchain. The blockchain of the user is synchronized with other blockchains using the respective blockchain client. Similarly to most distributed systems applications reading the blockchain is a straightforward procedure. The users parse their own local blockchain and perform the calculations they wish. On the other hand, writing data to the blockchain entails a more complex procedure. In order to write to the blockchain, the user needs to perform a transaction. Different blockchains will have different transaction types. For example, in Bitcoin sending 1 BTC from Alice to Bob would require a transaction, whereas in Ethereum changing the value of a smart-contract variable from 0 to 1 would require a transaction.
+
+Users who want to make a transaction will have to make the following steps to write it in the blockchain. Create a valid transaction according to the blockchain protocol, select the transaction fees, sign the transaction and then broadcast it to the network. A miner will select a number of transactions that float in the network and organize them in a block. Then the miner will try to append that block to the blockchain. The rules for appending blocks to the blockchain are described in the consensus protocol of the blockchain. The consensus protocol is a crucial component of each blockchain and it is the component that guarantees that all participants of the network will eventually agree upon a unique transaction log. In Section \ref{sec::BcCons} the consensus layer will be examined in more depth.
+
+Transaction fees and transaction order are subtle topics especially when building applications on top of blockchains. Blockchain technology offers no guarantee about the absolute order of transactions. This means that Alice could send a transaction minutes (even hours) later than Bob and still see her transaction first on the blockchain. Most miners, assuming a rational behavior, will choose to add a transaction with high transaction fees to the blockchain. This asynchronism in the transactions leaves a lot of room for attacks when designing an application. Blockchain applications should be designed in a way that ensures fairness for the users. This means that users should have the same experience when using the application, regardless of the transaction order \cite{Luu:2016:MSC:2976749.2978309}.
+}
+\subsection{Consensus} \label{sec::BcCons}{
+
+The consensus protocol used by the Bitcoin and the Ethereum blockchain relies on Proof-of-Work (PoW). According to the protocol, in order to produce a new block, miners need to solve a moderately hard cryptographic puzzle. The cryptographic puzzle required is finding a nonce such that the hash of the previous block concatenated with the nonce is less than a target difficulty \cite{nakamoto2008bitcoin}.
+
+The goal of any blockchain protocol is to maintain a robust transaction ledger. The robust transaction ledger can also be thought of as a state-machine-replication protocol (this is more aligned with the distributed systems literature). A transaction ledger is said to be robust if it satisfies two properties: persistence, and liveness. Intuitively, the persistence property guarantees that when transactions are added to the blockchain they cannot be edited and all honest parties agree upon their position in the blockchain. The liveness property guarantees that all valid transactions will be eventually added to the blockchain. For a more rigorous definition of these properties, the reader can refer to \cite{Garay2017The,Pass2017AnalysisNetworks,Kiayias2016OnBlockchain}. The above papers proved that the Bitcoin and the Ethereum consensus protocols generate a robust transaction ledger under the assumption that more than 50\% of the hashing power of the network belongs to honest parties. To construct those proofs, these papers also make assumption on network delay. However, rigorously evaluating these papers is out of the scope of the project. 
+}
+
+\subsection{Blockchain Zoo}\label{sec:blockchainZoo}{
+
+A lot of the details in the description above are left obscure by choice. The reason for that is because the design of a blockchain entails many subtle choices. Many research papers have tried to organize different blockchains based on their design choices \cite{Vukolic2016TheReplication}. There are blockchains that focus on maintaining a robust transaction ledger of a cryptocurrency, such as Bitcoin or Litecoin. There are blockchains that focus on state machine replication such as Ethereum where a user can provide the blockchain with an arbitrary state and other users can modify the state using functions. There are blockchains where nodes can enter or leave the protocol execution at any time. These blockchains are called public. Contrary there exist blockchains where only a limited number of users can participate and/or there are restrictions on who can issue new transactions and/or produce blocks. These blockchains are called private.
+
+Designing a blockchain application requires to select the proper blockchain for your problem or creating a new blockchain from scratch. Creating a new blockchain application from scratch is no an easy task. It requires to carefully design all the details, implement them correctly and have a sufficient amount of users to make the network secure. On the other hand, piggybacking on a pre-existing blockchain creates limitations, as the designer will have to fit the application requirements in the existing infrastructure.
+}
+}
+\section{Ethereum Blockchain}{
+
+\subsection{Smart-Contract Programming}{
+
+In general, a contract is a binding agreement between parties that clearly define the responsibilities and duties of the stakeholders. Contracts are used widely in the world to construct and formalize business and other agreements between people. In his paper, Szabo \cite{szabo1997formalizing} proposed the idea of digital contracts that would be developed by the stakeholders in the form of programs and then executed by machines. An example of such digital contract is the firmware of a vending machine. It is programmed by the stakeholders to provide the user with a refreshment drink upon the insertion of a coin.
+
+Quickly after the Bitcoin revolution, people understood that the Bitcoin scripting language offered an infrastructure to develop and deploy smart-contracts. The Bitcoin scripting language offers many possibilities to develop smart-contracts that implement $m-n$ multi-signature transactions, coinjoin \footnote{\url{https://en.bitcoin.it/wiki/CoinJoin}, Access Date: 7 Aug. 2018} transactions or even hosting a domain-name-system \cite{kalodner2015empirical}. However, the Bitcoin scripting language is limited by design to a specific set of instructions and does not offer functionalities such as loops. This causes the Bitcoin scripting language to not be Turing-Complete. This design choice by Bitcoin led to the development of Ethereum. Ethereum was designed to be a fully programmable blockchain which supports a Turing-complete language. This means that, in theory, any computational problem could be solved in Ethereum. 
+
+Ethereum smart-contracts are developed in a higher level language such as Solidity and then compiled down to native Ethereum-Virtual-Machine (EVM) instructions. With this design, Ethereum managed to create an entire ecosystem of decentralized applications (DApps). Ethereum applications can have a smart-contract to play the role of a decentralized server that is fully determined by code. However, this comes at a significant cost. Decentralized applications are not private, they operate on public data in a fully transparent way.
+}
+\subsection{Ethereum Smart-Contract Implementation}{
+
+Contrary to Bitcoin, Ethereum follows more strictly the state-machine replication definition in its blockchain design \cite{WoodGavin2014Ethereum:Ledger}. The Ethereum network can natively handle monetary transactions using its own currency called ETH but is not limited to that. Users can define arbitrary states and state modification functions on the blockchain. The states are implemented as smart-contracts, which are files of code that resemble, at least syntactically, to classes. The smart-contracts contain variables (state variables) and functions that provide an interface to modify the state. As a result, in the Ethereum network, a transaction can have the following form. Alice wants to execute function \textit{foo} from smart-contract \textit{bar}. Then the miner would execute the function in the smart-contract locally on his computer, update the state, add the transaction to the blockchain and return the results to Alice.
+
+Now consider a malicious function in a smart-contract that is an infinite loop. Eve could send a transaction with a request for executing this malicious function. The miner who sees the transaction and tries to execute the function is suffering from a denial of service attack. The miner is trying to execute a program that never ends and cannot continue the mining operation. To prevent this attack, Ethereum uses the notion of a unitless quantity called \textbf{gas}. Each EVM instruction is associated with a \textbf{gas cost}. The issuer of an Ethereum transaction needs to specify the following, (i) the gas price which has monetary value and (ii) the gas limit. As a result, an Ethereum transaction will have transaction fees that can be calculated in the following way:
+
+\begin{align*}
+ (transaction\_fees) = (gas\_cost) \cdot (gas\_price)
+\end{align*}
+
+and the gas cost is calculated in the following way:
+
+\begin{align*}
+ (gas\_cost) = min\{(gas\_limit),(inscruction\_costs)\}
+\end{align*}
+
+If the gas cost of the instructions surpasses the gas limit set by the user the execution of the function is stopped and the state of the smart-contract is reverted. For the transactions, miners are rewarded with fixed block reward and with the transaction fees required to execute smart-contract functions, for appending a new block to the blockchain. As a result, setting a high gas price for your transaction would incentivize miners to add it in the next block.
+
+Storing data on the blockchain also comes with a cost. This is another benefit of the gas cost, that it incentivizes users to store the minimum amount of information in the blockchain. As a consequence of that, instructions (OPCODEs) that reduce the data that need to be stored on the blockchain have a negative gas cost. For example, the delete OPCODE used to delete an entry from an array is associated with negative gas cost. Note that, even though there exist operators with negative costs, it is impossible to create a negative gas cost transaction, as it is not possible to create a function that only uses a delete OPCODE.
+}
+}
+}
